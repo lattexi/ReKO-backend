@@ -1,7 +1,6 @@
 import { insertUser, selectUserByUsername, selectUsers, deleteUser } from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import 'dotenv/config';
 
 export const registerUser = async (req, res) => {
     try {
@@ -37,7 +36,7 @@ export const loginUser = async (req, res) => {
         const token = jwt.sign(
             { id: user.id, username: user.username, is_admin: user.is_admin },
             process.env.JWT_SECRET,
-            { expiresIn: JWT_TOKEN_EXPIRES_IN }
+            { expiresIn: process.env.JWT_TOKEN_EXPIRES_IN }
         );
         res.json({ token });
     } catch (error) {
