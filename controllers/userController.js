@@ -4,7 +4,13 @@ import bcrypt from 'bcrypt';
 
 export const registerUser = async (req, res) => {
     try {
-        const user = req.body;
+        const { username, password, email } = req.body;
+        const user = {
+            username,
+            password,
+            email,
+            is_admin: false,
+        };
         const existingUser = await selectUserByUsername(user.username);
         if (existingUser) {
             return res.status(400).json({ message: 'Käyttäjänimi on jo käytössä' });

@@ -67,8 +67,9 @@ export const deleteFeaturedItem = async (id) => {
 
 // item search
 export const selectItemBySearch = async (searchTerm) => {
-    const sql = `SELECT * FROM Items WHERE name LIKE ? OR description LIKE ?`;
-    const [rows] = await promisePool.query(sql, [`%${searchTerm}%`, `%${searchTerm}%`]);
+    const sql = 'SELECT * FROM Items WHERE name LIKE ? OR description LIKE ?';
+    const searchPattern = `%${searchTerm}%`;
+    const [rows] = await promisePool.query(sql, [searchPattern, searchPattern]);
     return rows;
 };
 
