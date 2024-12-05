@@ -38,7 +38,7 @@ export const loginUser = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_TOKEN_EXPIRES_IN }
         );
-        res.json({ token });
+        res.json({ token, user: { id: user.id, username: user.username, email: user.email, is_admin: user.is_admin } });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
