@@ -1,4 +1,3 @@
-// orderRoutes.js
 import express from 'express';
 import {
     placeOrder,
@@ -7,20 +6,11 @@ import {
     removeOrder,
 } from '../controllers/orderController.js';
 import { authenticateToken, isAdmin } from '../middleware/authMiddleware.js';
-import { body, param, validationResult } from 'express-validator';
+import { validateRequest } from '../middleware/validationMiddleware.js';
+import { body, param } from 'express-validator';
 
 const router = express.Router();
 
-// Middleware to handle validation results
-const validateRequest = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-};
-
-// Place an order with input validation
 router.post(
     '/',
     [
@@ -36,10 +26,8 @@ router.post(
     placeOrder
 );
 
-// Get all orders (admin only)
 router.get('/', authenticateToken, isAdmin, getAllOrders);
 
-// Get order by ID with parameter validation
 router.get(
     '/:id',
     authenticateToken,
@@ -50,7 +38,6 @@ router.get(
     getOrderById
 );
 
-// Delete order (admin only) with parameter validation
 router.delete(
     '/:id',
     authenticateToken,

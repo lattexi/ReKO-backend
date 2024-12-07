@@ -1,24 +1,16 @@
-// userRoutes.js
 import express from 'express';
-import { registerUser, loginUser, getUsers, removeUser } from '../controllers/userController.js';
+import { registerUser, loginUser, getUsers, removeUser, getUserByUsername } from '../controllers/userController.js';
 import { authenticateToken, isAdmin } from '../middleware/authMiddleware.js';
-import { body, param, validationResult } from 'express-validator';
+import { validateRequest } from '../middleware/validationMiddleware.js';
+import { body, param } from 'express-validator';
 
 const router = express.Router();
 
-// Middleware to handle validation results
-const validateRequest = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-};
 
-// Get all users (admin only)
 router.get('/', authenticateToken, isAdmin, getUsers);
 
-// Register user with input validation
+router.get('/me', authenticateToken, getUserByUsername);
+
 router.post(
     '/register',
     [
@@ -30,7 +22,6 @@ router.post(
     registerUser
 );
 
-// Login user with input validation
 router.post(
     '/login',
     [
@@ -41,7 +32,6 @@ router.post(
     loginUser
 );
 
-// Delete user (admin only) with parameter validation
 router.delete(
     '/:id',
     authenticateToken,

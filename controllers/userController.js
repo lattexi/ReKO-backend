@@ -27,7 +27,7 @@ export const loginUser = async (req, res) => {
         const { username, password } = req.body;
         const user = await selectUserByUsername(username);
         if (!user) {
-            return res.status(400).json({ message: 'Virheellinen käyttäjänimi' });
+            return res.status(400).json({ message: 'Virheellinen käyttäjänimi tai salasana' });
         }
         const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword) {
@@ -48,6 +48,19 @@ export const getUsers = async (req, res) => {
     try {
         const users = await selectUsers();
         res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const getUserByUsername = async (req, res) => {
+    try {
+        const { username } = req.user;
+        const user = await selectUserByUsername(username);
+        if (!user) {
+            return res.status(404).json({ message: 'Käyttäjää ei löydy' });
+        }
+        res.json(user);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

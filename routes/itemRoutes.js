@@ -1,4 +1,3 @@
-// itemRoutes.js
 import express from 'express';
 import {
     listItem,
@@ -14,20 +13,13 @@ import {
 } from '../controllers/itemController.js';
 import { upload } from '../config/multerConfig.js';
 import { authenticateToken, isAdmin } from '../middleware/authMiddleware.js';
-import { body, param, validationResult } from 'express-validator';
+import { validateRequest } from '../middleware/validationMiddleware.js';
+import { body, param } from 'express-validator';
 
 const router = express.Router();
 
-// Middleware to handle validation results
-const validateRequest = (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-};
 
-// Search items with parameter validation
+// Search items
 router.get(
     '/search/:query',
     [param('query').notEmpty().trim().escape().withMessage('Search query is required')],
@@ -35,7 +27,6 @@ router.get(
     searchItem
 );
 
-// Get items by category with parameter validation
 router.get(
     '/category/:categoryId',
     [param('categoryId').isInt({ gt: 0 }).withMessage('Invalid category ID')],
@@ -43,10 +34,37 @@ router.get(
     getItemsByCategory
 );
 
-// Get all items
+// Featured items
+router.post(
+    '/featured',
+    authenticateToken,
+    isAdmin,
+    [
+        body('item_id').isInt({ gt: 0 }).withMessage('Invalid item ID'),
+        body('start_date').isISO8601().toDate().withMessage('Invalid start date'),
+        body('end_date').isISO8601().toDate().withMessage('Invalid end date'),
+    ],
+    validateRequest,
+    setFeaturedItem
+);
+
+router.get('/featured', getFeaturedItemsList);
+
+router.delete(
+    '/featured/:id',
+    authenticateToken,
+    isAdmin,
+    [
+        param('id').isInt({ gt: 0 }).withMessage('Invalid featured item ID')
+    ],
+    validateRequest,
+    removeFeaturedItem
+);
+
+
+// Items
 router.get('/', getAllItems);
 
-// Add new item with input validation
 router.post(
     '/',
     authenticateToken,
@@ -62,7 +80,6 @@ router.post(
     listItem
 );
 
-// Get item by ID with parameter validation
 router.get(
     '/:id',
     [
@@ -72,7 +89,6 @@ router.get(
     getItemById
 );
 
-// Update item with input and parameter validation
 router.put(
     '/:id',
     authenticateToken,
@@ -89,7 +105,6 @@ router.put(
     changeItem
 );
 
-// Delete item with parameter validation
 router.delete(
     '/:id',
     authenticateToken,
@@ -99,35 +114,6 @@ router.delete(
     ],
     validateRequest,
     removeItem
-);
-
-// Set featured item with input validation
-router.post(
-    '/featured',
-    authenticateToken,
-    isAdmin,
-    [
-        body('item_id').isInt({ gt: 0 }).withMessage('Invalid item ID'),
-        body('start_date').isISO8601().toDate().withMessage('Invalid start date'),
-        body('end_date').isISO8601().toDate().withMessage('Invalid end date'),
-    ],
-    validateRequest,
-    setFeaturedItem
-);
-
-// Get featured items
-router.get('/featured', getFeaturedItemsList);
-
-// Delete featured item with parameter validation
-router.delete(
-    '/featured/:id',
-    authenticateToken,
-    isAdmin,
-    [
-        param('id').isInt({ gt: 0 }).withMessage('Invalid featured item ID')
-    ],
-    validateRequest,
-    removeFeaturedItem
 );
 
 export default router;

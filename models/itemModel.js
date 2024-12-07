@@ -54,8 +54,8 @@ export const insertFeaturedItem = async (item_id, start_date, end_date) => {
 
 export const selectFeaturedItems = async () => {
     const today = new Date().toISOString().split('T')[0];
-    const sql = 'SELECT * FROM Items INNER JOIN FeaturedItems ON Items.id = FeaturedItems.item_id WHERE ? BETWEEN start_date AND end_date';
-    const [rows] = await promisePool.query(sql, [today]);
+    const sql = `SELECT * FROM Items INNER JOIN FeaturedItems ON Items.id = FeaturedItems.item_id WHERE '${today}' BETWEEN start_date AND end_date`;
+    const [rows] = await promisePool.query(sql);
     return rows;
 };
 
