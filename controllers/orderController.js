@@ -16,7 +16,7 @@ export const placeOrder = async (req, res) => {
         const result = await insertOrder(order);
         res.status(201).json({ message: 'Tilaus tehty onnistuneesti', orderId: result.orderId });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -25,7 +25,7 @@ export const getAllOrders = async (req, res) => {
         const orders = await selectAllOrders();
         res.json(orders);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -44,7 +44,7 @@ export const getOrderById = async (req, res) => {
 
         res.json(order);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -54,6 +54,6 @@ export const removeOrder = async (req, res) => {
         await deleteOrder(id);
         res.json({ message: 'Tilaus poistettu onnistuneesti' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
