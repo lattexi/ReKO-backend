@@ -28,11 +28,10 @@ CREATE TABLE Items (
 );
 
 CREATE TABLE FeaturedItems (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  item_id INT NOT NULL,
+  item_id INT NOT NULL PRIMARY KEY,
   start_date DATE NOT NULL,
   end_date DATE NOT NULL,
-  FOREIGN KEY (item_id) REFERENCES Items(id)
+  FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Orders (
@@ -54,3 +53,11 @@ CREATE TABLE OrderItems (
   FOREIGN KEY (order_id) REFERENCES Orders(id),
   FOREIGN KEY (item_id) REFERENCES Items(id)
 );
+
+-- Alter table
+ALTER TABLE orderitems DROP FOREIGN KEY orderitems_ibfk_2;
+
+ALTER TABLE orderitems
+ADD CONSTRAINT orderitems_ibfk_2
+FOREIGN KEY (item_id) REFERENCES items(id)
+ON DELETE CASCADE;
