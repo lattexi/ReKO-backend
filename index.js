@@ -7,9 +7,7 @@ import itemRoutes from './routes/itemRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 
 const app = express();
-app.use(cors({
-    origin: 'https://users.metropolia.fi',
-}));
+app.use(cors());
 
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
