@@ -15,6 +15,12 @@ export const selectUserByUsername = async (username) => {
     return rows[0];
 };
 
+export const selectuserByEmail = async (email) => {
+    const sql = 'SELECT * FROM Users WHERE email = ?';
+    const [rows] = await promisePool.query(sql, [email]);
+    return rows[0];
+};
+
 export const selectUsers = async () => {
     const sql = 'SELECT id, username, email, is_admin, created_at FROM Users';
     const [rows] = await promisePool.query(sql);

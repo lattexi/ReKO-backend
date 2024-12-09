@@ -59,9 +59,9 @@ export const selectFeaturedItems = async () => {
     return rows;
 };
 
-export const deleteFeaturedItem = async (id) => {
-    const sql = 'DELETE FROM FeaturedItems WHERE id = ?';
-    const [result] = await promisePool.query(sql, [id]);
+export const deleteFeaturedItem = async (item_id) => {
+    const sql = 'DELETE FROM FeaturedItems WHERE item_id = ?';
+    const [result] = await promisePool.query(sql, [item_id]);
     return result;
 };
 

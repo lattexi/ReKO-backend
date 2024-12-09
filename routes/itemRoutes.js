@@ -51,11 +51,11 @@ router.post(
 router.get('/featured', getFeaturedItemsList);
 
 router.delete(
-    '/featured/:id',
+    '/featured',
     authenticateToken,
     isAdmin,
     [
-        param('id').isInt({ gt: 0 }).withMessage('Invalid featured item ID')
+        body('item_id').isInt({ gt: 0 }).withMessage('Invalid featured item ID')
     ],
     validateRequest,
     removeFeaturedItem

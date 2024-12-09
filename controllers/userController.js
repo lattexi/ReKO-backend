@@ -1,4 +1,4 @@
-import { insertUser, selectUserByUsername, selectUsers, deleteUser } from '../models/userModel.js';
+import { insertUser, selectUserByUsername, selectuserByEmail, selectUsers, deleteUser } from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
@@ -12,13 +12,17 @@ export const registerUser = async (req, res) => {
             is_admin: false,
         };
         const existingUser = await selectUserByUsername(user.username);
+        const existingEmail = await selectuserByEmail(user.email);
         if (existingUser) {
             return res.status(400).json({ message: 'Käyttäjänimi on jo käytössä' });
+        }
+        if (existingEmail) {
+            return res.status(400).json({ message: 'Sähköpostiosoite on jo käytössä' });
         }
         await insertUser(user);
         res.status(201).json({ message: 'Käyttäjä rekisteröity onnistuneesti' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -40,7 +44,7 @@ export const loginUser = async (req, res) => {
         );
         res.json({ token, user: { id: user.id, username: user.username, email: user.email, is_admin: user.is_admin } });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -49,7 +53,7 @@ export const getUsers = async (req, res) => {
         const users = await selectUsers();
         res.json(users);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -62,7 +66,7 @@ export const getUserByUsername = async (req, res) => {
         }
         res.json(user);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -72,6 +76,6 @@ export const removeUser = async (req, res) => {
         await deleteUser(id);
         res.json({ message: 'Käyttäjä poistettu onnistuneesti' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };

@@ -9,7 +9,7 @@ export const getAllItems = async (req, res) => {
         const items = await selectAllItems();
         res.json(items);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -29,7 +29,7 @@ export const listItem = async (req, res) => {
         const result = await insertItem(item);
         res.status(201).json({ message: 'Tuote lisätty onnistuneesti', itemId: result.insertId });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -42,7 +42,7 @@ export const getItemById = async (req, res) => {
         }
         res.json(item);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -63,7 +63,7 @@ export const changeItem = async (req, res) => {
         await updateItem(id, item);
         res.json({ message: 'Tuote päivitetty onnistuneesti' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -73,7 +73,7 @@ export const removeItem = async (req, res) => {
         await deleteItem(id);
         res.json({ message: 'Tuote poistettu onnistuneesti' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -84,7 +84,7 @@ export const setFeaturedItem = async (req, res) => {
         await insertFeaturedItem(item_id, start_date, end_date);
         res.json({ message: 'Tuote asetettu nostetuksi' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -93,17 +93,17 @@ export const getFeaturedItemsList = async (req, res) => {
         const items = await selectFeaturedItems();
         res.json(items);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
 export const removeFeaturedItem = async (req, res) => {
     try {
-        const { id } = req.params;
-        await deleteFeaturedItem(id);
+        const { item_id } = req.body;
+        await deleteFeaturedItem(item_id);
         res.json({ message: 'Nosto poistettu' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -114,7 +114,7 @@ export const searchItem = async (req, res) => {
         const items = await selectItemBySearch(search);
         res.json(items);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
 
@@ -124,6 +124,6 @@ export const getItemsByCategory = async (req, res) => {
         const items = await selectItemsByCategory(categoryId);
         res.json(items);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Internal server error' });
     }
 };
