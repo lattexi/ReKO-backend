@@ -8,7 +8,7 @@ import orderRoutes from './routes/orderRoutes.js';
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://users.metropolia.fi',
 }));
 
 app.use(express.json());

@@ -53,20 +53,3 @@ CREATE TABLE OrderItems (
   FOREIGN KEY (order_id) REFERENCES Orders(id),
   FOREIGN KEY (item_id) REFERENCES Items(id)
 );
-
--- Alter table
-ALTER TABLE orderitems DROP FOREIGN KEY orderitems_ibfk_2;
-
-DROP Table FeaturedItems
-
-CREATE TABLE FeaturedItems (
-  item_id INT NOT NULL PRIMARY KEY,
-  start_date DATE NOT NULL,
-  end_date DATE NOT NULL,
-  FOREIGN KEY (item_id) REFERENCES Items(id) ON DELETE CASCADE
-);
-
-ALTER TABLE orderitems
-ADD CONSTRAINT orderitems_ibfk_2
-FOREIGN KEY (item_id) REFERENCES items(id)
-ON DELETE CASCADE;
